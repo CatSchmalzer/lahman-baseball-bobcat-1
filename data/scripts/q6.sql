@@ -2,7 +2,8 @@
 --(A stolen base attempt results either in a stolen base or being caught stealing.) Consider only players who attempted at least 20 stolen bases.
 -- 
 
-Select namelast, namefirst, sb, cs, (sb::numeric+cs::numeric) as total_attempts, cast(sb::numeric/(sb::numeric+cs::numeric) as decimal(5,4)) as percent_stolen
+Select namelast, namefirst, sb, cs, (sb::numeric+cs::numeric) as total_attempts,
+round(cast(sb::numeric/(sb::numeric+cs::numeric) as decimal(5,4))*100 ,1) as percent_stolen
 FROM batting inner join people on batting.playerid = people.playerid 
 where cs >0
 and (sb::numeric+cs::numeric) >= 20
