@@ -9,7 +9,7 @@
 select position_groups, count(po) as groups_putout
 -- create a subquery for game postions 
 from (select distinct playerid, po, yearid,
-	   case when fielding.pos = 'OF' then 'outfield' 
+	   case when fielding.pos = 'OF' then 'Outfield' 
 	   		when fielding.pos in ('SS', '2B', '3B') then 'Infield'
 			when fielding.pos in ('P', 'C') then 'Battery'
 			end as position_groups
