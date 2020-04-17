@@ -13,20 +13,21 @@ FROM homegames
 --Find the name and height of the shortest player in the database. 
 	--Eddie Gaedel is shortest player in database. he was 43 inches tall or 3'7".
 --How many games did he play in? What is the name of the team for which he played?
-	-- He played one game for SLA. 
+	-- He played one game for St. Louis Browns. 
 SELECT *
 FROM appearances
 LIMIT 5;
 
-SELECT teams.name, g_all, namefirst, namelast, MIN(height) as shortest_player
+/*SELECT teams.name, g_all, namefirst, namelast, MIN(height) as shortest_player
 FROM people
 JOIN appearances on appearances.playerid = people.playerid
 JOIN teams ON teams.teamid = appearances.teamid
 GROUP BY teams.name, g_all, namefirst, namelast
 ORDER BY shortest_player
-LIMIT 1;
+LIMIT 1;*/
 
---polished by team
+--polished by team/FINAL QUERY
+
 SELECT concat(namefirst,' ', namelast) as full_name, MIN(height) as short_player_inches,  g_all as games_played, teams.name as team_name
 FROM people as p
 LEFT JOIN appearances as a on a.playerid = p.playerid
@@ -40,32 +41,23 @@ LIMIT 1;
 --Find all players in the database who played at Vanderbilt University. 
 --Create a list showing each player’s first and last names as well as the total salary they earned in the major leagues. 
 --Sort this list in descending order by the total salary earned. 
---Which Vanderbilt player earned the most money in the majors?
+--Which Vanderbilt player earned the most money in the majors? David Price
 
---Need to join 'people', 'collegeplaying', and 'schools' tables to get full player name and Vandy. 
---(playerid to playerid then schoolid to schoolid)
---Salary * the number of years he played. (people table: debut to final game)
 
 --SELECT *
 --FROM schools
 --WHERE schoolname LIKE '%Vanderbilt%';
 --schoolid is Vandy
 
---SELECT *
---FROM teamsfranchises
-
-
-
---Please run outer query and CTE run individually. How do I link them? Do I need a partition window function to sum each player's salary?
-WITH total_pro_salary AS (SELECT playerid, SUM(salary) as total_salary
+--QUESTION 3 DONE!
+WITH total_pro_salary AS (SELECT playerid, SUM(salary::text::money) as total_salary
 						FROM salaries
 						WHERE salary IS NOT null
 						GROUP BY playerid
 						ORDER BY total_salary DESC)		
-
-SELECT DISTINCT concat(namefirst,' ', namelast) AS full_name, schoolid, --salary
+SELECT DISTINCT concat(namefirst,' ', namelast) AS full_name, schoolid, total_salary
 FROM people AS p
-	INNER JOIN collegeplaying AS c ON c.playerid = p.playerid
-	INNER JOIN salaries ON salaries.playerid = c.playerid
+	JOIN collegeplaying AS c ON c.playerid = p.playerid
+	JOIN total_pro_salary as t ON p.playerid = t.playerid
 WHERE schoolid = 'vandy'
-ORDER BY full_name
+ORDER BY total_salary DESC;
