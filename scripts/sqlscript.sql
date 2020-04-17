@@ -54,17 +54,18 @@
 -- Using the attendance figures from the homegames table, find the teams and parks which had the top 5 average attendance per game in 2016 (where average attendance is defined as total attendance divided by number of games). Only consider parks where there were at least 10 games played. Report the park name, team name, and average attendance. Repeat for the lowest 5 average attendance.
 
 --Question 9
--- Which managers have won the TSN Manager of the Year award in both the National League (NL) and the American League (AL)? Give their full name and the teams that they were managing when they won the award.
--- SELECT playerid, lgid, awardid, yearid
--- 	FROM awardsmanagers
--- 	WHERE awardid ilike ‘TSN Manager of the year’
--- 	AND lgid = ‘NL’
--- 	OR lgid = ‘AL’
--- 	AND awardid Not ilike ‘BBWAA Manager of the year’
--- 	Group by awardsmanagers.playerid, awardsmanagers.lgid, awardsmanagers.awardid, yearid
--- 	order by yearid;
---I believe we can exclude everything before 1986 when it was all major league (ML) baseball and before AL and NL were created
-
+--Which managers have won the TSN Manager of the Year award in both the National League (NL) 
+--and the American League (AL)? Give their full name and the teams that they were managing when 
+--they won the award.
+SELECT *
+FROM awardsmanagers
+WHERE awardid ILIKE '%TSN%';
+--i found johnsda02 and leylaji99 just by looking at list, might be more
+SELECT playerid, lgid, awardid, yearid
+	FROM awardsmanagers
+	WHERE awardid ILIKE '%TSN%' and yearid > 1985
+	ORDER BY playerid;
+	
 -- Open-ended questions
 
 --Question 10
